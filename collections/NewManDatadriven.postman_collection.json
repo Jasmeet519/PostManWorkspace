@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "d1ee9119-c39d-4e5d-9832-1614a0a31a61",
+		"name": "NewManDatadriven",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6746953"
+	},
+	"item": [
+		{
+			"name": "CreateUserDatadriven",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response.json();\r",
+							"console.log(\"REsponse USer Token: \"+ response[\"User-Token\"]);\r",
+							"\r",
+							"pm.variables.set(\"UserToken\", response[\"User-Token\"]);\r",
+							"\r",
+							"\r",
+							"var template = `\r",
+							"    <style type=\"text/css\">\r",
+							"        .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+							"        .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+							"        .tftable tr {background-color:#ffffff;}\r",
+							"        .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+							"        .tftable tr:hover {background-color:#e0ffff;}\r",
+							"    </style>\r",
+							"    \r",
+							"    <table class=\"tftable\" border=\"1\">\r",
+							"        <tr>\r",
+							"            <th>User Token</th>\r",
+							"            <th>Login</th>\r",
+							"        </tr>\r",
+							"        <tr id=\"row_1\" onClick=\"handleClick(this.id)\">\r",
+							"            <td>{{User-Token}}</td>\r",
+							"            <td>{{login}}</td>\r",
+							"        </tr>\r",
+							"    </table>\r",
+							"`;\r",
+							"\r",
+							"pm.visualizer.set(template, pm.response.json());\r",
+							"\r",
+							"pm.execution.setNextRequest(null);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//var random = Math.floor(Math.random() *10000000);\r",
+							"//pm.environment.set(\"login\", \"jasmeet\"+random);\r",
+							"//pm.environment.set(\"email\", \"singh.jasmeet\"+random+\"@gmail.com\");\r",
+							"//pm.environment.set(\"password\",\"Jasmeet@123\")\r",
+							"\r",
+							"pm.collectionVariables.set(\"login\",pm.iterationData.get(\"Login\"));\r",
+							"pm.collectionVariables.set(\"email\",pm.iterationData.get(\"Email\"));\r",
+							"pm.collectionVariables.set(\"password\",pm.iterationData.get(\"Password\"));\r",
+							"pm.collectionVariables.set(\"expectedStatusCode\",pm.iterationData.get(\"Status Code\"));\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token token=\"e83110a3d5d5c9af8f760333d36577fa\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"user\": {\r\n    \"login\": \"{{login}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://favqs.com/api/users",
+					"protocol": "https",
+					"host": [
+						"favqs",
+						"com"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "login",
+			"value": "Jagjeet1108"
+		},
+		{
+			"key": "email",
+			"value": "singh.Jagjeet1108@gmail.com"
+		},
+		{
+			"key": "password",
+			"value": "Jagjeet@123"
+		},
+		{
+			"key": "ExpectedStatusCode",
+			"value": 201
+		},
+		{
+			"key": "expectedStatusCode",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,470 @@
+{
+	"info": {
+		"_postman_id": "5164ea7b-24ac-40b2-9e8e-b9d1c519053d",
+		"name": "NewMan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6746953"
+	},
+	"item": [
+		{
+			"name": "CreateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response.json();\r",
+							"console.log(\"REsponse USer Token: \"+ response[\"User-Token\"]);\r",
+							"\r",
+							"pm.variables.set(\"UserToken\", response[\"User-Token\"]);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var template = `\r",
+							"    <style type=\"text/css\">\r",
+							"        .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+							"        .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+							"        .tftable tr {background-color:#ffffff;}\r",
+							"        .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+							"        .tftable tr:hover {background-color:#e0ffff;}\r",
+							"    </style>\r",
+							"    \r",
+							"    <table class=\"tftable\" border=\"1\">\r",
+							"        <tr>\r",
+							"            <th>User Token</th>\r",
+							"            <th>Login</th>\r",
+							"        </tr>\r",
+							"        <tr id=\"row_1\" onClick=\"handleClick(this.id)\">\r",
+							"            <td>{{User-Token}}</td>\r",
+							"            <td>{{login}}</td>\r",
+							"        </tr>\r",
+							"    </table>\r",
+							"`;\r",
+							"\r",
+							"pm.visualizer.set(template, pm.response.json());\r",
+							"\r",
+							"// GetUserDatadriven\r",
+							"if(pm.response.code==200){\r",
+							"      pm.execution.setNextRequest(\"GetUserDatadriven\");\r",
+							"}\r",
+							"else{\r",
+							"     pm.execution.setNextRequest(null);\r",
+							"}\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random = Math.floor(Math.random() *10000000);\r",
+							"pm.environment.set(\"login\", \"jasmeet\"+random);\r",
+							"pm.environment.set(\"email\", \"singh.jasmeet\"+random+\"@gmail.com\");\r",
+							"pm.environment.set(\"password\",\"Jasmeet@123\")\r",
+							"\r",
+							"//pm.collectionVariables.set(\"login\",pm.iterationData.get(\"Login\"));\r",
+							"//pm.collectionVariables.set(\"email\",pm.iterationData.get(\"Email\"));\r",
+							"//pm.collectionVariables.set(\"password\",pm.iterationData.get(\"Password\"));\r",
+							"//pm.collectionVariables.set(\"expectedStatusCode\",pm.iterationData.get(\"Status Code\"));\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token token=\"e83110a3d5d5c9af8f760333d36577fa\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"user\": {\r\n    \"login\": \"{{login}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://favqs.com/api/users",
+					"protocol": "https",
+					"host": [
+						"favqs",
+						"com"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserDatadriven",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.execution.setNextRequest(\"UpdateUser\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token token=\"e83110a3d5d5c9af8f760333d36577fa\"",
+						"type": "text"
+					},
+					{
+						"key": "User-Token",
+						"value": "{{UserToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://favqs.com/api/users/:loginInfo",
+					"protocol": "https",
+					"host": [
+						"favqs",
+						"com"
+					],
+					"path": [
+						"api",
+						"users",
+						":loginInfo"
+					],
+					"variable": [
+						{
+							"key": "loginInfo",
+							"value": "{{login}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.execution.setNextRequest(\"GetActivities2\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token token=\"e83110a3d5d5c9af8f760333d36577fa\"",
+						"type": "text"
+					},
+					{
+						"key": "User-Token",
+						"value": "{{UserToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"user\": {\r\n    \"login\": \"{{login}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"twitter_username\": \"UpdatedTwitterName\",\r\n    \"facebook_username\": \"UpdatedFacebookUserName\",\r\n    \"pic\": \"twitter\",\r\n    \"profanity_filter\": true\r\n\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://favqs.com/api/users/:loginInfo",
+					"protocol": "https",
+					"host": [
+						"favqs",
+						"com"
+					],
+					"path": [
+						"api",
+						"users",
+						":loginInfo"
+					],
+					"variable": [
+						{
+							"key": "loginInfo",
+							"value": "{{login}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetActivities2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var template = `\r",
+							"    <style type=\"text/css\">\r",
+							"        .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+							"        .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+							"        .tftable tr {background-color:#ffffff;}\r",
+							"        .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+							"        .tftable tr:hover {background-color:#e0ffff;}\r",
+							"    </style>\r",
+							"    \r",
+							"    <table class=\"tftable\" border=\"1\">\r",
+							"        <tr>\r",
+							"            <th>Activity</th>\r",
+							"            <th>Owner Type</th>\r",
+							"            <th>Owner ID</th>\r",
+							"            <th>Owner Value</th>\r",
+							"            <th>Action</th>\r",
+							"            <th>Trackable ID</th>\r",
+							"            <th>Trackable Type</th>\r",
+							"            <th>Trackable Value</th>\r",
+							"            <th>Message</th>\r",
+							"        </tr>\r",
+							"       {{#each varResponse.activities}}\r",
+							"            <tr id=row_{{@key}} onClick=\"handleClick(this.id)\">\r",
+							"                <td id={{@key}}>{{activity_id}}</td>\r",
+							"                <td>{{owner_type}}</td>\r",
+							"                <td>{{owner_id}}</td>\r",
+							"                <td>{{owner_value}}</td>\r",
+							"                <td>{{action}}</td>\r",
+							"                <td>{{trackable_id}}</td>\r",
+							"                <td>{{trackable_type}}</td>\r",
+							"                <td>{{trackable_value}}</td>\r",
+							"                <td>{{message}}</td>\r",
+							"            </tr>\r",
+							"        {{/each}}\r",
+							"    </table>\r",
+							"`;\r",
+							" pm.visualizer.set(template, {\r",
+							"     // Pass the response body parsed as JSON as `data`\r",
+							"     varResponse: pm.response.json()\r",
+							" });\r",
+							"\r",
+							"\r",
+							" pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"65411\");\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test.skip(\"The response has all properties\", () => {\r",
+							"    //parse the response JSON and test three properties\r",
+							"    const responseJson = pm.response.json();\r",
+							"    //console.log(\"Response Page: \"+ responseJson.page)\r",
+							"    //console.log(\"Response Last Page: \"+ responseJson.last_page)\r",
+							"    //console.log(\"Activities ID for second object: \"+ responseJson.activities[1].activity_id);\r",
+							"\r",
+							"    pm.expect(responseJson.page).to.be.a('number');\r",
+							"    pm.expect(responseJson.activities[0]).to.have.property('activity_id').that.is.a('number');\r",
+							"    var activitiesResponse = responseJson.activities;\r",
+							"\r",
+							"    for(let i=0; i<activitiesResponse.length;i++){\r",
+							"        //console.log(\"Activites OBJECt\"+activitiesResponse);\r",
+							"        console.log(activitiesResponse[i].activity_id);\r",
+							"        pm.expect(activitiesResponse[i]).to.have.property('activity_id').that.is.a('number');\r",
+							"         console.log(\"Activity ID property asserted\");\r",
+							"         pm.expect(activitiesResponse[i]).to.have.property('owner_type').that.is.a('number');\r",
+							"    }\r",
+							"\r",
+							"   \r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test.skip(\"Verifying Ownertype is User\", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  const activitiesRes = responseJson.activities;\r",
+							"\r",
+							"  for(let activityRes of activitiesRes){\r",
+							"    //console.log(activityRes.owner_type);\r",
+							"    pm.expect(activityRes.owner_type).to.be.eq('User');\r",
+							"    pm.expect(activityRes.owner_id).to.be.eq('gose1');\r",
+							"    pm.expect(activityRes.owner_value).to.be.eq('gose');\r",
+							"  }\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Content-Type header is present\", () => {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Content-Type header is application/json\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.execution.setNextRequest(null);\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token token=\"e83110a3d5d5c9af8f760333d36577fa\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://favqs.com/api/activities/?type=tag&filter=funny",
+					"protocol": "https",
+					"host": [
+						"favqs",
+						"com"
+					],
+					"path": [
+						"api",
+						"activities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "tag"
+						},
+						{
+							"key": "filter",
+							"value": "funny"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "login",
+			"value": "Jagjeet1108"
+		},
+		{
+			"key": "email",
+			"value": "singh.Jagjeet1108@gmail.com"
+		},
+		{
+			"key": "password",
+			"value": "Jagjeet@123"
+		},
+		{
+			"key": "ExpectedStatusCode",
+			"value": 201
+		},
+		{
+			"key": "expectedStatusCode",
+			"value": ""
+		}
+	]
+}

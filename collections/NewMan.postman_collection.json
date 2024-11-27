@@ -352,7 +352,7 @@
 							"});\r",
 							"\r",
 							"\r",
-							"pm.test.skip(\"Verifying Ownertype is User\", () => {\r",
+							"pm.test(\"Verifying Ownertype is User\", () => {\r",
 							"  const responseJson = pm.response.json();\r",
 							"  const activitiesRes = responseJson.activities;\r",
 							"\r",
